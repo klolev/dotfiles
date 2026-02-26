@@ -23,3 +23,4 @@ set foldlevelstart=99 "start file with all folds opened
 nnoremap <leader>O <cmd>Telescope find_files<cr>
 nnoremap <leader>F <cmd>Telescope live_grep<cr>
 nnoremap <leader>FF <cmd>NvimTreeFindFile<cr>
+nnoremap <leader>dv <cmd>DiffviewOpen<cr>

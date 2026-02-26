@@ -37,11 +37,10 @@ require("lazy").setup({
 			event = { "BufReadPost", "BufNewFile" },
 			cmd = { "LspInfo", "LspInstall", "LspUinstall", "LspStart", "LspStop", "LspRestart" },
 			config = function()
-				local lspconfig = require("lspconfig")
-
-				lspconfig.clangd.setup({})
-				lspconfig.rust_analyzer.setup({})
-				lspconfig.sourcekit.setup({
+				vim.lsp.config("clangd", {})
+				vim.lsp.config("rust_analyzer", {})
+				vim.lsp.config("hls", {})
+				vim.lsp.config("sourcekit", {
 					capabilities = {
 						workspace = {
 							didChangeWatchedFiles = {
@@ -50,25 +49,25 @@ require("lazy").setup({
 						},
 					},
 				})
+				vim.lsp.enable({"clangd", "rust_analyzer", "hls", "sourcekit", "jsonnet_ls", "cue"})
 
 				vim.api.nvim_create_autocmd("LspAttach", {
 					desc = "LSP Actions",
 					callback = function(args)
 						-- Once we've attached, configure the keybindings
 						local wk = require("which-key")
-						wk.register({
-							K = { vim.lsp.buf.hover, "LSP hover info" },
-							gd = { vim.lsp.buf.definition, "LSP go to definition" },
-							gD = { vim.lsp.buf.declaration, "LSP go to declaration" },
-							gi = { vim.lsp.buf.implementation, "LSP go to implementation" },
-							gr = { vim.lsp.buf.references, "LSP list references" },
-							gs = { vim.lsp.buf.signature_help, "LSP signature help" },
-							gn = { vim.lsp.buf.rename, "LSP rename" },
-							["[g"] = { vim.diagnostic.goto_prev, "Go to previous diagnostic" },
-							["g]"] = { vim.diagnostic.goto_next, "Go to next diagnostic" },
+						wk.add({
+							{ "K", vim.lsp.buf.hover, desc = "LSP hover info" },
+							{ "gd", vim.lsp.buf.definition, desc = "LSP go to definition" },
+							{ "gD", vim.lsp.buf.declaration, desc = "LSP go to declaration" },
+							{ "gi", vim.lsp.buf.implementation, desc = "LSP go to implementation" },
+							{ "gr", vim.lsp.buf.references, desc = "LSP list references" },
+							{ "gs", vim.lsp.buf.signature_help, desc = "LSP signature help" },
+							{ "gn", vim.lsp.buf.rename, desc = "LSP rename" },
+							{"[g", vim.diagnostic.goto_prev, desc = "Go to previous diagnostic" },
+							{"g]", vim.diagnostic.goto_next, desc = "Go to next diagnostic" },
 						}, {
-							mode = "n",
-							silent = true,
+							mode = "n"
 						})
 					end,
 				})
@@ -277,13 +276,16 @@ require("lazy").setup({
 			opts = {},
         -- stylua: ignore
         keys = {
-            { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-            { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
-            { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
-            { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-            { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
-        },
+				{ "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+				{ "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+				{ "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+				{ "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+				{ "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+			},
 		},
+		"sindrets/diffview.nvim",
+		"google/vim-jsonnet",
+		"jjo/vim-cue"
 	},
 	-- Configure any other settings here. See the documentation for more details.
 	-- colorscheme that will be used when installing plugins.
